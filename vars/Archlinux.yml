@@ -1,0 +1,85 @@
+system_packages:
+  # Core Compositor
+  - xorg-xwayland
+  - noctalia
+  - xdg-desktop-portal
+  - xdg-desktop-portal-wlr
+  - xdg-desktop-portal-gtk
+
+  # Login Manager
+  - greetd
+  - noctalia-greeter
+
+  # File Management & Drive Mounting
+  - udisks2
+
+  # Audio
+  - pipewire-pulse
+  - pipewire-alsa
+  - wireplumber
+  - pavucontrol
+
+  # Bluetooth
+  - bluez
+  - gst-plugin-pipewire
+
+  # Network
+  - networkmanager
+  - wireless-regdb
+
+  # Input Method
+  - fcitx5
+  - fcitx5-gtk
+  - fcitx5-qt
+  - fcitx5-configtool
+
+  # Printer
+  - cups
+  - cups-filters
+  - system-config-printer
+  - cups-pk-helper
+
+  # Screen Brightness
+  - brightnessctl
+
+  # Fonts
+  - ttf-jetbrains-mono
+  - noto-fonts
+  - noto-fonts-extra
+  - ttf-font-awesome
+
+  # Icon Themes
+  - papirus-icon-theme
+  - adwaita-icon-theme
+
+  # Theming
+  - nwg-look
+  - qt5ct
+  - qt6ct
+  - kvantum
+  - adw-gtk-theme
+
+  # Terminal Apps
+  - git
+  - curl
+  - neovim
+  - fastfetch
+  - btop
+  - flatpak
+  - syncthing
+  - stow
+  - cmatrix
+  - base-devel
+
+  # GUI Apps
+  - celluloid
+  - gnome-disk-utility
+  - thunar
+  - kitty
+  - mousepad
+  - xarchiver
+  - atril
+  - galculator
+
+  # AUR Setup
+  - base-devel

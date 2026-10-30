@@ -1,0 +1,123 @@
+---
+- name: Arch Linux Setup
+  hosts: localhost
+  become: true
+
+  vars:
+    # Change this to your actual system username
+    target_user: "haji_amzar"
+
+  vars_files:
+    - flatpak_vars.yml
+
+  tasks:
+    - name: Load OS-specific variables
+      include_vars: "{{ item }}"
+      with_first_found:
+        - files:
+            - "{{ ansible_os_family }}.yml"
+            - "default.yml"
+          paths:
+            - "vars"
+
+    # Install Packages
+    - name: Install system utilities and core applications
+      package:
+        name: "{{ system_packages }}"
+        state: present
+
+    - name: Ensure greeter group exists
+      group:
+        name: greeter
+        state: present
+        system: true
+
+    - name: Ensure greeter user exists
+      user:
+        name: greeter
+        group: greeter
+        system: true
+        shell: /sbin/nologin
+        home: /var/lib/noctalia-greeter
+        create_home: false
+        state: present
+
+    - name: Create noctalia-greeter state directory
+      file:
+        path: /var/lib/noctalia-greeter
+        state: directory
+        owner: greeter
+        group: greeter
+        mode: '0750'
+
+    - name: Write greetd configuration file for noctalia-greeter
+      copy:
+        dest: /etc/greetd/config.toml
+        content: |
+          [terminal]
+          vt = 1
+
+          [default_session]
+          command = "/usr/bin/noctalia-greeter-session"
+          user = "greeter"
+
+    - name: Enable and start core system and networking services
+      systemd:
+        name: "{{ item }}"
+        enabled: true
+        state: started
+      loop:
+        - greetd
+        - NetworkManager
+
+    - name: Install GNU Stow for dotfiles management
+      package:
+        name: stow
+        state: present
+
+    - name: Clone or update dotfiles repository (as target user)
+      git:
+        repo: 'https://github.com/hajiamzar/dotfiles.git' # Replace with your actual repo URL
+        dest: "~/.dotfiles"
+        accept_hostkey: true
+        update: true
+      become: true
+      become_user: "{{ target_user }}"
+
+    - name: Check if dotfiles packages exist in repository
+      stat:
+        path: "~/.dotfiles/{{ item }}"
+      loop:
+        - noctalia
+        - umbriel
+        - kitty
+      register: dotfiles_check
+      become: true
+      become_user: "{{ target_user }}"
+
+    - name: Stow dotfiles configurations into ~/.config (as target user)
+      command: >
+        stow -d "~/.dotfiles"
+             -t "~/.config"
+             "{{ item.item }}"
+      loop: "{{ dotfiles_check.results }}"
+      when: item.stat.exists
+      become: true
+      become_user: "{{ target_user }}"
+
+    - name: Add Flathub repository
+      community.general.flatpak_remote:
+        name: flathub
+        state: present
+        method: user
+        flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+      become: true
+      become_user: "{{ target_user }}"
+
+    - name: Install specified Flatpak packages
+      community.general.flatpak:
+        name: "{{ item }}"
+        state: present
+        method: system
+      loop: "{{ flatpak_packages }}"
+      become: true

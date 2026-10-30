@@ -1,0 +1,24 @@
+---
+flatpak_packages:
+  - com.brave.Browser
+  - com.calibre_ebook.calibre
+  - com.github.tchx84.Flatseal
+  - com.obsproject.Studio
+  - com.valvesoftware.Steam
+  - dev.vencord.Vesktop
+  - fr.handbrake.ghb
+  - io.github.Foldex.AdwSteamGtk
+  - io.github.hihebark.QuranReader
+  - org.aegisub.Aegisub
+  - org.audacityteam.Audacity
+  - org.electrum.electrum
+  - org.gtk.Gtk3theme.adw-gtk3
+  - org.inkscape.Inkscape
+  - org.kde.kdenlive
+  - org.kde.kmymoney
+  - org.kde.krita
+  - org.keepassxc.KeePassXC
+  - org.libreoffice.LibreOffice
+  - org.nickvision.tagger
+  - org.nickvision.tubeconverter
+  - org.telegram.desktop
