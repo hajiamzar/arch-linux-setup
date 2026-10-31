@@ -8,7 +8,7 @@
     target_user: "haji_amzar"
 
   vars_files:
-    - flatpak_vars.yml
+    - vars/flatpak_vars.yml
 
   tasks:
     - name: Load OS-specific variables
@@ -19,6 +19,20 @@
             - "default.yml"
           paths:
             - "vars"
+
+    - name: Enable multilib repository in pacman.conf
+      ini_file:
+        path: /etc/pacman.conf
+        section: multilib
+        option: Include
+        value: /etc/pacman.d/mirrorlist
+        state: present
+      register: multilib_enabled
+
+    - name: Synchronize pacman package databases
+      pacman:
+        update_cache: yes
+      when: multilib_enabled.changed
 
     # Install Packages
     - name: Install system utilities and core applications
@@ -37,7 +51,7 @@
         name: greeter
         group: greeter
         system: true
-        shell: /sbin/nologin
+        shell: /usr/bin/nologin
         home: /var/lib/noctalia-greeter
         create_home: false
         state: present
@@ -58,8 +72,27 @@
           vt = 1
 
           [default_session]
-          command = "/usr/bin/noctalia-greeter-session"
+          command = "env XCURSOR_THEME=Simp1e-Gruvbox-Dark XCURSOR_SIZE=24 /usr/bin/noctalia-greeter-session"
           user = "greeter"
+
+    - name: Ensure /etc/udisks2 directory exists
+      file:
+        path: /etc/udisks2
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Configure udisks2 default mount options
+      copy:
+        dest: /etc/udisks2/mount_options.conf
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          [defaults]
+          btrfs_defaults=compress=zstd
+          defaults=noatime
 
     - name: Enable and start core system and networking services
       systemd:
@@ -78,7 +111,7 @@
     - name: Clone or update dotfiles repository (as target user)
       git:
         repo: 'https://github.com/hajiamzar/dotfiles.git' # Replace with your actual repo URL
-        dest: "~/.dotfiles"
+        dest: "/home/{{ target_user }}/.dotfiles"
         accept_hostkey: true
         update: true
       become: true
@@ -86,7 +119,7 @@
 
     - name: Check if dotfiles packages exist in repository
       stat:
-        path: "~/.dotfiles/{{ item }}"
+        path: "/home/{{ target_user }}/.dotfiles/{{ item }}"
       loop:
         - noctalia
         - umbriel
@@ -97,22 +130,20 @@
 
     - name: Stow dotfiles configurations into ~/.config (as target user)
       command: >
-        stow -d "~/.dotfiles"
-             -t "~/.config"
+        stow -d "/home/{{ target_user }}/.dotfiles"
+             -t "/home/{{ target_user }}/.config"
              "{{ item.item }}"
       loop: "{{ dotfiles_check.results }}"
       when: item.stat.exists
       become: true
       become_user: "{{ target_user }}"
 
-    - name: Add Flathub repository
+    - name: Add Flathub repository (System-wide)
       community.general.flatpak_remote:
         name: flathub
         state: present
-        method: user
+        method: system
         flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
-      become: true
-      become_user: "{{ target_user }}"
 
     - name: Install specified Flatpak packages
       community.general.flatpak:

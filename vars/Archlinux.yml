@@ -16,11 +16,13 @@ system_packages:
   # Audio
   - pipewire-pulse
   - pipewire-alsa
+  - pipewire-audio
   - wireplumber
   - pavucontrol
 
   # Bluetooth
   - bluez
+  - bluez-utils
   - gst-plugin-pipewire
 
   # Network
@@ -39,14 +41,13 @@ system_packages:
   - system-config-printer
   - cups-pk-helper
 
-  # Screen Brightness
-  - brightnessctl
-
   # Fonts
   - ttf-jetbrains-mono
   - noto-fonts
   - noto-fonts-extra
   - ttf-font-awesome
+  - noto-fonts-cjk
+  - noto-fonts-emoji
 
   # Icon Themes
   - papirus-icon-theme
@@ -56,8 +57,14 @@ system_packages:
   - nwg-look
   - qt5ct
   - qt6ct
-  - kvantum
   - adw-gtk-theme
+
+  # Laptop
+  - upower
+  - brightnessctl
+
+  # Keyring
+  - gnome-keyring
 
   # Terminal Apps
   - git
@@ -70,16 +77,23 @@ system_packages:
   - stow
   - cmatrix
   - base-devel
+  - lsof
+  - github-cli
 
   # GUI Apps
   - celluloid
   - gnome-disk-utility
   - thunar
+  - gvfs
+  - ffmpegthumbnailer
+  - tumbler
   - kitty
   - mousepad
   - xarchiver
   - atril
   - galculator
+  - ristretto
+  - zed
 
-  # AUR Setup
-  - base-devel
+  # Multilib
+  - steam-devices
