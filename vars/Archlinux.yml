@@ -69,7 +69,7 @@ system_packages:
   # Terminal Apps
   - git
   - curl
-  - neovim
+  - vim
   - fastfetch
   - btop
   - flatpak

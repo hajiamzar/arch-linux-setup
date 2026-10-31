@@ -64,6 +64,17 @@
         group: greeter
         mode: '0750'
 
+    - name: Write configuration for noctalia-greeter
+      copy:
+        dest: /var/lib/noctalia-greeter/greeter.toml
+        owner: greeter
+        group: greeter
+        mode: '0644'
+        content: |
+          [cursor]
+          theme = "Simp1e-Gruvbox-Dark"
+          size = 24
+
     - name: Write greetd configuration file for noctalia-greeter
       copy:
         dest: /etc/greetd/config.toml
@@ -72,7 +83,7 @@
           vt = 1
 
           [default_session]
-          command = "env XCURSOR_THEME=Simp1e-Gruvbox-Dark XCURSOR_SIZE=24 /usr/bin/noctalia-greeter-session"
+          command = "/usr/bin/noctalia-greeter-session"
           user = "greeter"
 
     - name: Ensure /etc/udisks2 directory exists
