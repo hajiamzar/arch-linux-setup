@@ -132,9 +132,21 @@
       stat:
         path: "/home/{{ target_user }}/.dotfiles/{{ item }}"
       loop:
-        - noctalia
-        - umbriel
+        - btop
+        - gtk
         - kitty
+        - mime
+        - mousepad
+        - noctalia
+        - nwg-look
+        - qt5ct
+        - qt6ct
+        - systemd
+        - thunar
+        - umbriel
+        - xsettingsd
+        - zed
+
       register: dotfiles_check
       become: true
       become_user: "{{ target_user }}"
