@@ -128,39 +128,6 @@
       become: true
       become_user: "{{ target_user }}"
 
-    - name: Check if dotfiles packages exist in repository
-      stat:
-        path: "/home/{{ target_user }}/.dotfiles/{{ item }}"
-      loop:
-        - btop
-        - gtk
-        - kitty
-        - mime
-        - mousepad
-        - noctalia
-        - nwg-look
-        - qt5ct
-        - qt6ct
-        - systemd
-        - thunar
-        - umbriel
-        - xsettingsd
-        - zed
-
-      register: dotfiles_check
-      become: true
-      become_user: "{{ target_user }}"
-
-    - name: Stow dotfiles configurations into ~/.config (as target user)
-      command: >
-        stow -d "/home/{{ target_user }}/.dotfiles"
-             -t "/home/{{ target_user }}/.config"
-             "{{ item.item }}"
-      loop: "{{ dotfiles_check.results }}"
-      when: item.stat.exists
-      become: true
-      become_user: "{{ target_user }}"
-
     - name: Add Flathub repository (System-wide)
       community.general.flatpak_remote:
         name: flathub
