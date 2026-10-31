@@ -7,7 +7,6 @@ flatpak_packages:
   - com.valvesoftware.Steam
   - dev.vencord.Vesktop
   - fr.handbrake.ghb
-  - io.github.Foldex.AdwSteamGtk
   - io.github.hihebark.QuranReader
   - org.aegisub.Aegisub
   - org.audacityteam.Audacity
