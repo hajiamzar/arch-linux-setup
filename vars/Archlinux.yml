@@ -51,6 +51,8 @@ system_packages:
   - ttf-font-awesome
   - noto-fonts-cjk
   - noto-fonts-emoji
+  - ttf-dejavu
+  - ttf-liberation
 
   # Icon Themes
   - papirus-icon-theme
