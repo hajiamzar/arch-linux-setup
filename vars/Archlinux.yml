@@ -29,6 +29,9 @@ system_packages:
   - networkmanager
   - wireless-regdb
 
+  # Power
+  - power-profiles-daemon
+
   # Input Method
   - fcitx5
   - fcitx5-gtk
