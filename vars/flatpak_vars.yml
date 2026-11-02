@@ -18,6 +18,7 @@ flatpak_packages:
   - org.kde.krita
   - org.keepassxc.KeePassXC
   - org.libreoffice.LibreOffice
+  - org.libretro.RetroArch
   - org.nickvision.tagger
   - org.nickvision.tubeconverter
   - org.telegram.desktop
